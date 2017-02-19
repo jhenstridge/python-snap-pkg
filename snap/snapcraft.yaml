@@ -24,9 +24,7 @@ apps:
   python3:
     command: bin/python3
   pydoc3:
-    command: bin/pydoc3
-  pyvenv:
-    command: bin/pyvenv
+    command: bin/python3 -m pydoc
 
 parts:
   python:
@@ -63,6 +61,7 @@ parts:
         - bin/
         - lib/
         - -bin/*-config
+        - -lib/python3.6/site-packages/
         - -lib/python3.6/test/
         - -lib/python3.6/*/test/
         - -lib/python3.6/lib-dynload/_test*.so
@@ -99,3 +98,20 @@ parts:
       - libbluetooth-dev
       - libsqlite3-dev
       - libffi-dev
+
+  sitecustomize:
+    after:
+      - python
+    plugin: dump
+    source: .
+    prime:
+      - lib/python3.6/*.py
+      - lib/python3.6/__pycache__
+
+    install: |
+      # byte compile sitecustomize.py
+      set -x
+      $SNAPCRAFT_STAGE/bin/python3.6 -Wi -m compileall -d lib/python3.6 $SNAPCRAFT_PART_INSTALL/lib/python3.6/
+      $SNAPCRAFT_STAGE/bin/python3.6 -O -Wi -m compileall -d lib/python3.6 $SNAPCRAFT_PART_INSTALL/lib/python3.6/
+      $SNAPCRAFT_STAGE/bin/python3.6 -OO -Wi -m compileall -d lib/python3.6 $SNAPCRAFT_PART_INSTALL/lib/python3.6/
+
