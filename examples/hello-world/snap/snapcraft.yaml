@@ -1,0 +1,33 @@
+name: hello-world
+version: '0.1'
+summary: A simple hello world application
+description: |
+  A simple hello world application.
+
+grade: devel # must be 'stable' to release into candidate/stable channels
+confinement: strict
+
+plugs:
+  python3:
+    interface: content
+    content: python3
+    target: python
+    default-provider: python36-jamesh
+
+apps:
+  hello:
+    command: hello.sh
+    plugs:
+      - python3
+
+parts:
+  hello-world:
+    plugin: dump
+    source: .
+    install: |
+      # Create directory to serve as mount point for Python
+      mkdir $SNAPCRAFT_PART_INSTALL/python
+    prime:
+      - hello.py
+      - hello.sh
+      - python/
