@@ -1,0 +1,101 @@
+name: python3.6-jamesh
+version: 3.6.0
+summary: Python language interpreter and standard library
+description: |
+  Python is a programming language that lets you work quickly and
+  integrate systems more effectively.
+
+grade: devel
+confinement: strict
+
+slots:
+  python3:
+    interface: content
+    content: python3
+    read:
+      - .
+  python3.6:
+    interface: content
+    content: python3.6
+    read:
+      - .
+
+apps:
+  python3:
+    command: bin/python3
+  pydoc3:
+    command: bin/pydoc3
+  pyvenv:
+    command: bin/pyvenv
+
+parts:
+  python:
+    plugin: autotools
+    source: https://www.python.org/ftp/python/3.6.0/Python-3.6.0.tar.xz
+    #source: ./Python-3.6.0.tar.xz
+    configflags:
+      - --enable-shared
+      - --enable-ipv6
+      - --enable-loadable-sqlite-extensions
+      - --with-dbmliborder=bdb:gdbm
+      - --with-computed-gotos
+      - --without-ensurepip
+      - --with-system-expat
+      - --with-system-libmpdec
+      - --with-system-ffi
+      - --with-fpectl
+
+    install: |
+      # Set origin relative rpath for Python executable
+      set -x
+      triplet=$(dpkg-architecture -q DEB_TARGET_MULTIARCH)
+      rpath="\$ORIGIN/../lib:\$ORIGIN/../lib/$triplet:\$ORIGIN/../usr/lib/$triplet"
+      patchelf --set-rpath "$rpath" "$SNAPCRAFT_PART_INSTALL/bin/python3.6"
+
+      # Now do the same for extension modules
+      rpath="\$ORIGIN/../..:\$ORIGIN/../../$triplet:\$ORIGIN/../../../usr/lib/$triplet"
+      for extension in $SNAPCRAFT_PART_INSTALL/lib/python3.6/lib-dynload/*.so; do
+        patchelf --set-rpath "$rpath" "$extension"
+      done
+
+    filesets:
+      python:
+        - bin/
+        - lib/
+        - -bin/*-config
+        - -lib/python3.6/test/
+        - -lib/python3.6/*/test/
+        - -lib/python3.6/lib-dynload/_test*.so
+        - -lib/pkgconfig
+      tests:
+        - lib/python3.6/test/
+        - lib/python3.6/*/test/
+        - lib/python3.6/lib-dynload/_test*.so
+      manpages:
+        - share/man/
+      dev:
+        - bin/*-config
+        - include/
+        - lib/pkgconfig/
+
+    prime:
+      - $python
+      - $manpages
+
+    build-packages:
+      - gcc
+      - patchelf
+      - dpkg-dev
+      - libreadline-dev
+      - libncursesw5-dev
+      - zlib1g-dev
+      - libbz2-dev
+      - liblzma-dev
+      - libgdbm-dev
+      - libdb-dev
+      - libssl-dev
+      - libexpat1-dev
+      - libmpdec-dev
+      - libbluetooth-dev
+      - libsqlite3-dev
+      - libffi-dev
