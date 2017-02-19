@@ -1,5 +1,7 @@
 /parts
 /stage
 /prime
-*.snap
+/*.snap
+/*.tar.bz2
+/*.tar.xz
 *~
