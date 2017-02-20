@@ -15,7 +15,7 @@ plugs:
     default-provider: python36-jamesh
 
 apps:
-  hello:
+  hello-world:
     command: hello.sh
     plugs:
       - python3
