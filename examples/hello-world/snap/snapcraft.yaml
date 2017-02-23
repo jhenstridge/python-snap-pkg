@@ -6,6 +6,8 @@ description: |
 
 grade: devel # must be 'stable' to release into candidate/stable channels
 confinement: strict
+architectures:
+  - all
 
 plugs:
   python3:
