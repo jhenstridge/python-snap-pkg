@@ -25,6 +25,8 @@ apps:
     command: bin/python3
   pydoc3:
     command: bin/python3 -m pydoc
+  pip3:
+    command: bin/python3 -m pip
 
 parts:
   python:
@@ -37,7 +39,7 @@ parts:
       - --enable-loadable-sqlite-extensions
       - --with-dbmliborder=bdb:gdbm
       - --with-computed-gotos
-      - --without-ensurepip
+      - --with-ensurepip=upgrade
       - --with-system-expat
       - --with-system-libmpdec
       - --with-system-ffi
@@ -61,7 +63,6 @@ parts:
         - bin/
         - lib/
         - -bin/*-config
-        - -lib/python3.6/site-packages/
         - -lib/python3.6/test/
         - -lib/python3.6/*/test/
         - -lib/python3.6/lib-dynload/_test*.so
