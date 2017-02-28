@@ -46,8 +46,8 @@ parts:
       - --with-fpectl
 
     install: |
-      # Set origin relative rpath for Python executable
       set -x
+      # Set origin relative rpath for Python executable
       triplet=$(dpkg-architecture -q DEB_TARGET_MULTIARCH)
       rpath="\$ORIGIN/../lib:\$ORIGIN/../lib/$triplet:\$ORIGIN/../usr/lib/$triplet"
       patchelf --set-rpath "$rpath" "$SNAPCRAFT_PART_INSTALL/bin/python3.6"
@@ -65,12 +65,16 @@ parts:
         - -bin/*-config
         - -lib/python3.6/test/
         - -lib/python3.6/*/test/
-        - -lib/python3.6/lib-dynload/_test*.so
+        - -lib/python3.6/*/tests/
+        - -lib/python3.6/idle/idle_test/
+        - -lib/python3.6/lib-dynload/_*test*.so
         - -lib/pkgconfig
       tests:
         - lib/python3.6/test/
         - lib/python3.6/*/test/
-        - lib/python3.6/lib-dynload/_test*.so
+        - lib/python3.6/*/tests/
+        - lib/python3.6/idle/idle_test/
+        - lib/python3.6/lib-dynload/_*test*.so
       manpages:
         - share/man/
       dev:
@@ -81,6 +85,7 @@ parts:
     prime:
       - $python
       - $manpages
+      - $dev
 
     build-packages:
       - gcc
@@ -110,8 +115,8 @@ parts:
       - lib/python3.6/__pycache__
 
     install: |
-      # byte compile sitecustomize.py
       set -x
+      # byte compile sitecustomize.py
       $SNAPCRAFT_STAGE/bin/python3.6 -Wi -m compileall -d lib/python3.6 $SNAPCRAFT_PART_INSTALL/lib/python3.6/
       $SNAPCRAFT_STAGE/bin/python3.6 -O -Wi -m compileall -d lib/python3.6 $SNAPCRAFT_PART_INSTALL/lib/python3.6/
       $SNAPCRAFT_STAGE/bin/python3.6 -OO -Wi -m compileall -d lib/python3.6 $SNAPCRAFT_PART_INSTALL/lib/python3.6/
