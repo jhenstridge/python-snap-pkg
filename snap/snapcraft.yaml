@@ -109,15 +109,16 @@ parts:
     after:
       - python
     plugin: dump
-    source: .
-    prime:
-      - lib/python3.6/*.py
-      - lib/python3.6/__pycache__
+    source: src
+    organize:
+      '*': lib/python3.6/site-packages/
 
     install: |
       set -x
       # byte compile sitecustomize.py
-      $SNAPCRAFT_STAGE/bin/python3.6 -Wi -m compileall -d lib/python3.6 $SNAPCRAFT_PART_INSTALL/lib/python3.6/
-      $SNAPCRAFT_STAGE/bin/python3.6 -O -Wi -m compileall -d lib/python3.6 $SNAPCRAFT_PART_INSTALL/lib/python3.6/
-      $SNAPCRAFT_STAGE/bin/python3.6 -OO -Wi -m compileall -d lib/python3.6 $SNAPCRAFT_PART_INSTALL/lib/python3.6/
+      installdir=$SNAPCRAFT_PART_INSTALL
+      primedir=lib/python3.6/site-packages
+      $SNAPCRAFT_STAGE/bin/python3.6 -Wi -m compileall -d $primedir $installdir
+      $SNAPCRAFT_STAGE/bin/python3.6 -O -Wi -m compileall -d $primedir $installdir
+      $SNAPCRAFT_STAGE/bin/python3.6 -OO -Wi -m compileall -d $primedir $installdir
 
