@@ -23,10 +23,19 @@ slots:
 apps:
   python3:
     command: bin/python3
+    aliases:
+      - python3
+      - python3.6
   pydoc3:
     command: bin/python3 -m pydoc
+    aliases:
+      - pydoc3
+      - pydoc3.6
   pip3:
     command: bin/python3 -m pip
+    aliases:
+      - pip3
+      - pip3.6
 
 parts:
   compiler-wrapper:
