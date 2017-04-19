@@ -30,10 +30,18 @@ apps:
 
 parts:
   compiler-wrapper:
-    plugin: dump
+    plugin: nil
     source: tools
+    install: |
+      sed -e "s/@CC@/${CC:-gcc}/g" \
+          -e "s/@TRIPLET@/$(dpkg-architecture -q DEB_TARGET_MULTIARCH)/g" \
+          compiler.sh.in > $SNAPCRAFT_PART_INSTALL/compiler.sh
+      chmod a+x $SNAPCRAFT_PART_INSTALL/compiler.sh
     prime:
       - -*
+    build-packages:
+      - gcc
+      - dpkg-dev
 
   python:
     after:
@@ -86,7 +94,6 @@ parts:
 
     build-packages:
       - gcc
-      - dpkg-dev
       - libreadline-dev
       - libncursesw5-dev
       - zlib1g-dev

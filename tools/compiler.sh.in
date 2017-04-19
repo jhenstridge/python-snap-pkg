@@ -2,7 +2,8 @@
 
 # dpkg-architecture will try to execute $CC, so make sure we don't end
 # up re-calling our script.
-export CC=gcc
+export CC="@CC@"
+triplet="@TRIPLET@"
 
 get_target() {
     while [ $# -gt 1 ]; do
@@ -18,8 +19,6 @@ get_target() {
 
 target="$(get_target "$@")"
 target="$(basename "$target")"
-
-triplet=$(dpkg-architecture -q DEB_TARGET_MULTIARCH)
 
 rpath=""
 case "$target" in
