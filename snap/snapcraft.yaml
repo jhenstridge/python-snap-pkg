@@ -29,7 +29,15 @@ apps:
     command: bin/python3 -m pip
 
 parts:
+  compiler-wrapper:
+    plugin: dump
+    source: tools
+    prime:
+      - -*
+
   python:
+    after:
+      - compiler-wrapper
     plugin: autotools
     source: https://www.python.org/ftp/python/3.6.0/Python-3.6.0.tar.xz
     #source: ./Python-3.6.0.tar.xz
@@ -44,19 +52,8 @@ parts:
       - --with-system-libmpdec
       - --with-system-ffi
       - --with-fpectl
-
-    install: |
-      set -x
-      # Set origin relative rpath for Python executable
-      triplet=$(dpkg-architecture -q DEB_TARGET_MULTIARCH)
-      rpath="\$ORIGIN/../lib:\$ORIGIN/../lib/$triplet:\$ORIGIN/../usr/lib/$triplet"
-      patchelf --set-rpath "$rpath" "$SNAPCRAFT_PART_INSTALL/bin/python3.6"
-
-      # Now do the same for extension modules
-      rpath="\$ORIGIN/../..:\$ORIGIN/../../$triplet:\$ORIGIN/../../../usr/lib/$triplet"
-      for extension in $SNAPCRAFT_PART_INSTALL/lib/python3.6/lib-dynload/*.so; do
-        patchelf --set-rpath "$rpath" "$extension"
-      done
+    make-parameters:
+      - CC=$SNAPCRAFT_STAGE/compiler.sh
 
     filesets:
       python:
@@ -89,7 +86,6 @@ parts:
 
     build-packages:
       - gcc
-      - patchelf
       - dpkg-dev
       - libreadline-dev
       - libncursesw5-dev
