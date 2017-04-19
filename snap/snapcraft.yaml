@@ -1,5 +1,5 @@
 name: python36-jamesh
-version: 3.6.0
+version: 3.6.1
 summary: Python language interpreter and standard library
 description: |
   Python is a programming language that lets you work quickly and
@@ -47,8 +47,7 @@ parts:
     after:
       - compiler-wrapper
     plugin: autotools
-    source: https://www.python.org/ftp/python/3.6.0/Python-3.6.0.tar.xz
-    #source: ./Python-3.6.0.tar.xz
+    source: https://www.python.org/ftp/python/3.6.1/Python-3.6.1.tar.xz
     configflags:
       - --enable-shared
       - --enable-ipv6
