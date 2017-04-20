@@ -19,6 +19,12 @@ def main():
                 site.USER_BASE, 'lib', 'python%d.%d' % sys.version_info[:2])
             if os.path.isdir(site.USER_SITE):
                 known_paths = site.addsitedir(site.USER_SITE, known_paths)
-    site.addsitepackages(known_paths, [snap])
+
+    old_prefixes = site.PREFIXES
+    try:
+        site.PREFIXES = [snap]
+        site.addsitepackages(known_paths)
+    finally:
+        site.PREFIXES = old_prefixes
 
 main()

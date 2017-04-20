@@ -1,5 +1,5 @@
-name: python36-jamesh
-version: 3.6.1
+name: python2-jamesh
+version: 2.7.13
 summary: Python language interpreter and standard library
 description: |
   Python is a programming language that lets you work quickly and
@@ -9,33 +9,30 @@ grade: devel
 confinement: strict
 
 slots:
-  python3:
+  python2:
     interface: content
-    content: python3
-    read:
-      - .
-  python3.6:
-    interface: content
-    content: python3.6
+    content: python2
     read:
       - .
 
 apps:
-  python3:
-    command: bin/python3
+  python:
+    command: bin/python
     aliases:
-      - python3
-      - python3.6
-  pydoc3:
-    command: bin/python3 -m pydoc
+      - python
+      - python2
+      - python2.7
+  pydoc:
+    command: bin/python -m pydoc
     aliases:
-      - pydoc3
-      - pydoc3.6
-  pip3:
-    command: bin/python3 -m pip
+      - pydoc
+      - pydoc2.7
+  pip:
+    command: bin/python -m pip
     aliases:
-      - pip3
-      - pip3.6
+      - pip
+      - pip2
+      - pip2.7
 
 parts:
   compiler-wrapper:
@@ -56,16 +53,16 @@ parts:
     after:
       - compiler-wrapper
     plugin: autotools
-    source: https://www.python.org/ftp/python/3.6.1/Python-3.6.1.tar.xz
+    source: https://www.python.org/ftp/python/2.7.13/Python-2.7.13.tar.xz
     configflags:
       - --enable-shared
       - --enable-ipv6
-      - --enable-loadable-sqlite-extensions
+      - --enable-unicode=ucs4
+      #- --enable-loadable-sqlite-extensions
       - --with-dbmliborder=bdb:gdbm
       - --with-computed-gotos
       - --with-ensurepip=upgrade
       - --with-system-expat
-      - --with-system-libmpdec
       - --with-system-ffi
       - --with-fpectl
     make-parameters:
@@ -76,18 +73,18 @@ parts:
         - bin/
         - lib/
         - -bin/*-config
-        - -lib/python3.6/test/
-        - -lib/python3.6/*/test/
-        - -lib/python3.6/*/tests/
-        - -lib/python3.6/idle/idle_test/
-        - -lib/python3.6/lib-dynload/_*test*.so
+        - -lib/python2.7/test/
+        - -lib/python2.7/*/test/
+        - -lib/python2.7/*/tests/
+        - -lib/python2.7/idle/idle_test/
+        - -lib/python2.7/lib-dynload/_*test*.so
         - -lib/pkgconfig
       tests:
-        - lib/python3.6/test/
-        - lib/python3.6/*/test/
-        - lib/python3.6/*/tests/
-        - lib/python3.6/idle/idle_test/
-        - lib/python3.6/lib-dynload/_*test*.so
+        - lib/python2.7/test/
+        - lib/python2.7/*/test/
+        - lib/python2.7/*/tests/
+        - lib/python2.7/idle/idle_test/
+        - lib/python2.7/lib-dynload/_*test*.so
       manpages:
         - share/man/
       dev:
@@ -103,6 +100,7 @@ parts:
     build-packages:
       - gcc
       - libreadline-dev
+      - libtinfo-dev
       - libncursesw5-dev
       - zlib1g-dev
       - libbz2-dev
@@ -122,14 +120,14 @@ parts:
     plugin: dump
     source: src
     organize:
-      '*': lib/python3.6/site-packages/
+      '*': lib/python2.7/site-packages/
 
     install: |
       set -x
       # byte compile sitecustomize.py
       installdir=$SNAPCRAFT_PART_INSTALL
-      primedir=lib/python3.6/site-packages
-      $SNAPCRAFT_STAGE/bin/python3.6 -Wi -m compileall -d $primedir $installdir
-      $SNAPCRAFT_STAGE/bin/python3.6 -O -Wi -m compileall -d $primedir $installdir
-      $SNAPCRAFT_STAGE/bin/python3.6 -OO -Wi -m compileall -d $primedir $installdir
+      primedir=lib/python2.7/site-packages
+      $SNAPCRAFT_STAGE/bin/python2.7 -Wi -m compileall -d $primedir $installdir
+      $SNAPCRAFT_STAGE/bin/python2.7 -O -Wi -m compileall -d $primedir $installdir
+      $SNAPCRAFT_STAGE/bin/python2.7 -OO -Wi -m compileall -d $primedir $installdir
 
