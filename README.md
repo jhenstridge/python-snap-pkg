@@ -1,3 +1,5 @@
+[![Snap Status](https://build.snapcraft.io/badge/jhenstridge/python-snap-pkg.svg)](https://build.snapcraft.io/user/jhenstridge/python-snap-pkg)
+
 This repository contains snap packaging for the Python language
 interpreter and standard library.
 
