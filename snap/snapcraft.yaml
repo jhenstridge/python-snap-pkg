@@ -1,5 +1,5 @@
 name: python2-jamesh
-version: 2.7.13
+version: 2.7.14
 summary: Python language interpreter and standard library
 description: |
   Python is a programming language that lets you work quickly and
@@ -13,7 +13,7 @@ slots:
     interface: content
     content: python2
     read:
-      - .
+      - $SNAP
 
 apps:
   python:
@@ -53,7 +53,7 @@ parts:
     after:
       - compiler-wrapper
     plugin: autotools
-    source: https://www.python.org/ftp/python/2.7.13/Python-2.7.13.tar.xz
+    source: https://www.python.org/ftp/python/2.7.14/Python-2.7.14.tar.xz
     configflags:
       - --enable-shared
       - --enable-ipv6
