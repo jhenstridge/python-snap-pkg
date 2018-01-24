@@ -1,5 +1,5 @@
 name: python36-jamesh
-version: 3.6.1
+version: 3.6.4
 summary: Python language interpreter and standard library
 description: |
   Python is a programming language that lets you work quickly and
@@ -13,12 +13,12 @@ slots:
     interface: content
     content: python3
     read:
-      - .
-  python3.6:
+      - $SNAP
+  python36:
     interface: content
-    content: python3.6
+    content: python36
     read:
-      - .
+      - $SNAP
 
 apps:
   python3:
@@ -56,7 +56,7 @@ parts:
     after:
       - compiler-wrapper
     plugin: autotools
-    source: https://www.python.org/ftp/python/3.6.1/Python-3.6.1.tar.xz
+    source: https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tar.xz
     configflags:
       - --enable-shared
       - --enable-ipv6
